@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier
 
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "Hello Dealbreakers team!",
         modifier = modifier
     )
 }
