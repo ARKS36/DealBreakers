@@ -1,7 +1,6 @@
 package com.example.appdeal
 
 import android.graphics.drawable.Icon
-import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,6 +30,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.appdeal.ui.theme.AppdealTheme
+import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import com.example.appdeal.DatabaseHelper
+
 
 
 
