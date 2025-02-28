@@ -1,6 +1,5 @@
 package com.example.appdeal
 
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -12,10 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.padding import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -27,14 +23,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.appdeal.ui.theme.AppdealTheme
-
-
-
-
+import com.example.appdeal.Screen1
+import com.example.appdeal.Screen2
+import com.example.appdeal.Screen3
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -141,9 +135,9 @@ fun BaseScreen() {
                 }
             }
             }
-            Screen.Screen1 -> DisplayScreen(screenName = "Screen 1")
-            Screen.Screen2 -> DisplayScreen(screenName = "Screen 2")
-            Screen.Screen3 -> DisplayScreen(screenName = "Screen 3")
+            Screen.Screen1 -> Screen1()
+            Screen.Screen2 -> Screen2()
+            Screen.Screen3 -> Screen3()
             Screen.Search -> DisplayScreen(screenName = "Search")
 
         }
