@@ -23,12 +23,26 @@ class DataBaseMainActivity : AppCompatActivity() {
         dbHelper.insertItem("bread", "TraderMart", 2.30, "lb", 2.30, 0.7)
         dbHelper.insertItem("bread", "QuickShop", 1.60, "lb", 1.60, 0.9)
 
-        // Search for items sorted by price
+        // Test for output
+        Log.d("DB_RESULT", "Testing Logcat output...")
+        //  Search for "eggs" sorted by price
         val priceResults = dbHelper.searchItems("eggs", "price")
-        priceResults.forEach { Log.d("DB_RESULT", it) }
+        Log.d("DB_TEST", "Results for 'eggs' sorted by price:")
+        priceResults.forEach { Log.d("DB_TEST", it) }
 
-        // Search for items sorted by distance
+        //  Search for "eggs" sorted by distance
         val distanceResults = dbHelper.searchItems("eggs", "distance")
-        distanceResults.forEach { Log.d("DB_RESULT", it) }
+        Log.d("DB_TEST", "Results for 'eggs' sorted by distance:")
+        distanceResults.forEach { Log.d("DB_TEST", it) }
+
+        //  Search for "milk" sorted by price
+        val milkPriceResults = dbHelper.searchItems("milk", "price")
+        Log.d("DB_TEST", "Results for 'milk' sorted by price:")
+        milkPriceResults.forEach { Log.d("DB_TEST", it) }
+
+        //  Search for "bread" sorted by distance
+        val breadDistanceResults = dbHelper.searchItems("bread", "distance")
+        Log.d("DB_TEST", "Results for 'bread' sorted by distance:")
+        breadDistanceResults.forEach { Log.d("DB_TEST", it) }
     }
 }

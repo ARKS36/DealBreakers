@@ -1,4 +1,4 @@
-package com.example.appdeal  // ✅ Only one package declaration
+package com.example.appdeal  //  Only one package declaration
 
 import android.content.ContentValues
 import android.content.Context
@@ -40,7 +40,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         onCreate(db)
     }
 
-    // ✅ Insert item method - Place it here
+    //  Insert item method
     fun insertItem(name: String, storeName: String, price: Double, unit: String, pricePerUnit: Double, distance: Double) {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -53,5 +53,40 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
         db.insert(TABLE_NAME, null, values)
         db.close()
+    }
+
+    //  Move `searchItems` inside the class
+    fun searchItems(searchQuery: String, sortBy: String): List<String> {
+        val db = readableDatabase
+        val resultList = mutableListOf<String>()
+
+        val validSortColumns = mapOf(
+            "price" to COLUMN_PRICE,
+            "distance" to COLUMN_DISTANCE
+        )
+        val sortColumn = validSortColumns[sortBy] ?: COLUMN_PRICE  // Default to price if invalid sortBy
+
+        val query = """
+            SELECT * FROM $TABLE_NAME 
+            WHERE $COLUMN_NAME LIKE ? 
+            ORDER BY $sortColumn ASC
+        """.trimIndent()
+
+        val cursor = db.rawQuery(query, arrayOf("%$searchQuery%"))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val itemName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME))
+                val storeName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STORE))
+                val price = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PRICE))
+                val distance = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_DISTANCE))
+
+                resultList.add("$itemName from $storeName - Price: $$price, Distance: $distance miles")
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return resultList
     }
 }
