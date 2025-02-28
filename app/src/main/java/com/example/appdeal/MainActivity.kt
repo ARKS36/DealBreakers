@@ -1,6 +1,10 @@
 package com.example.appdeal
 
+<<<<<<< HEAD
 import android.os.Bundle
+=======
+import android.graphics.drawable.Icon
+>>>>>>> 8945b3d1d01811dee857658ba62c7f0e9b9943c4
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,9 +30,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.appdeal.ui.theme.AppdealTheme
+<<<<<<< HEAD
 import com.example.appdeal.Screen1
 import com.example.appdeal.Screen2
 import com.example.appdeal.Screen3
+=======
+import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import com.example.appdeal.DatabaseHelper
+
+
+
+
+
+>>>>>>> 8945b3d1d01811dee857658ba62c7f0e9b9943c4
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
