@@ -2,5 +2,19 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.kotlin.compose) apply false
+}
+
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath(libs.android.gradle.plugin)
+        classpath(libs.kotlin.gradle.plugin)
+    }
 }
