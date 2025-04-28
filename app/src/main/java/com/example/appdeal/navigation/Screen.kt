@@ -3,7 +3,7 @@ package com.example.appdeal.navigation
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object Search : Screen("search")
-    object Cart : Screen("cart")
+    object Forum : Screen("forum")
     object Favorites : Screen("favorites")
     object Profile : Screen("profile")
 
@@ -12,7 +12,7 @@ sealed class Screen(val route: String) {
             Home,
             Search,
             Favorites,
-            Cart,
+            Forum,
             Profile
         )
     }

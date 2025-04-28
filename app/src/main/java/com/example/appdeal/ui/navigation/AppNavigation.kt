@@ -41,8 +41,8 @@ fun AppNavigation(
             composable(Screen.Favorites.route) {
                 FavoritesScreen(viewModel = viewModel)
             }
-            composable(Screen.Cart.route) {
-                CartScreen()
+            composable(Screen.Forum.route) {
+                ForumScreen()
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
@@ -61,7 +61,7 @@ fun BottomNavigationBar(navController: NavHostController) {
             NavigationItem(Screen.Home, "Home", Icons.Default.Home),
             NavigationItem(Screen.Search, "Search", Icons.Default.Search),
             NavigationItem(Screen.Favorites, "Favorites", Icons.Default.Favorite),
-            NavigationItem(Screen.Cart, "Cart", Icons.Default.ShoppingCart),
+            NavigationItem(Screen.Forum, "Forum", Icons.Default.ChatBubble),
             NavigationItem(Screen.Profile, "Profile", Icons.Default.Person)
         )
 
