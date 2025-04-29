@@ -1,3 +1,4 @@
+
 package com.example.appdeal.ui.screens
 
 import androidx.compose.foundation.layout.*
@@ -11,14 +12,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.appdeal.data.FavoriteItem
 import com.example.appdeal.ui.viewmodel.ProductViewModel
 
 @Composable
 fun FavoritesScreen(viewModel: ProductViewModel) {
-    val favoriteProducts by viewModel.favoriteProducts.collectAsState()
+    val favoriteItems by viewModel.favoriteItems.collectAsState()
 
     Column(
         modifier = Modifier
@@ -27,25 +28,40 @@ fun FavoritesScreen(viewModel: ProductViewModel) {
     ) {
         Text(
             text = "Your Favorites",
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold
-            ),
+            style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        if (favoriteProducts.isEmpty()) {
+        if (favoriteItems.isEmpty()) {
             EmptyFavorites()
         } else {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(favoriteProducts) { product ->
-                    ProductCard(
-                        product = product,
-                        viewModel = viewModel
-                    )
+                items(favoriteItems, key = { it.hashCode() }) { favoriteItem ->
+                when (favoriteItem) {
+                        is FavoriteItem.FavoriteProduct -> {
+                            ProductCard(product = favoriteItem.product, viewModel = viewModel)
+                        }
+                        is FavoriteItem.FavoriteDeal -> {
+                            DealCard(deal = favoriteItem.deal)
+                        }
+                    }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun DealCard(deal: com.example.appdeal.data.UserDeal) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text("${deal.itemName} at ${deal.storeName}", style = MaterialTheme.typography.titleMedium)
+            Text("\$${deal.price}", style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
@@ -79,4 +95,4 @@ fun EmptyFavorites() {
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
-} 
+}

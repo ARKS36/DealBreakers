@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.update
+import com.example.appdeal.data.FavoriteItem
+import com.example.appdeal.data.UserDeal
+
 
 class ProductViewModel : ViewModel() {
     private val repository = ProductRepository()
@@ -21,6 +24,21 @@ class ProductViewModel : ViewModel() {
     
     private val _favoriteProducts = MutableStateFlow<List<Product>>(emptyList())
     val favoriteProducts: StateFlow<List<Product>> = _favoriteProducts.asStateFlow()
+
+
+    private val _favoriteItems = MutableStateFlow<List<FavoriteItem>>(emptyList())
+    val favoriteItems: StateFlow<List<FavoriteItem>> = _favoriteItems
+
+    fun addFavoriteProduct(product: Product) {
+        _favoriteItems.value = _favoriteItems.value + FavoriteItem.FavoriteProduct(product)
+    }
+
+    fun addFavoriteDeal(deal: UserDeal) {
+        _favoriteItems.value = _favoriteItems.value + FavoriteItem.FavoriteDeal(deal)
+    }
+
+
+
 
     fun onSearchQueryChange(query: String) {
         _searchQuery.value = query
