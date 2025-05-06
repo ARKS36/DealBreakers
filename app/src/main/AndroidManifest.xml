@@ -14,8 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppDeal"
         tools:targetApi="31">
+        
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.AppDeal">
             <intent-filter>
@@ -23,18 +24,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppDeal" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppDeal" />
+
         <activity
             android:name=".RecipeBookActivity"
-            android:exported="true"
-            android:label="Recipe Book">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"
+            android:label="Recipe Book" />
+
         <activity
             android:name=".DataBaseMainActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Database Main" />
     </application>
 

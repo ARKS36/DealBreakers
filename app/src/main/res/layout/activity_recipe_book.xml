@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Ingredients Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Available Ingredients"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/ingredientInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Enter ingredient"
+                android:inputType="text"/>
+
+            <Button
+                android:id="@+id/addIngredientButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/noIngredientsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No ingredients added yet"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"/>
+
+        <ListView
+            android:id="@+id/availableIngredientsListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:maxHeight="200dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Find Recipes Button -->
+        <Button
+            android:id="@+id/findRecipesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Find Matching Recipes"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Matching Recipes Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Matching Recipes"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/noRecipesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No matching recipes found"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"/>
+
+        <ListView
+            android:id="@+id/matchingRecipesListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="200dp"
+            android:background="@android:color/darker_gray"/>
+
+    </LinearLayout>
+</ScrollView> 
