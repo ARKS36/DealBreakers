@@ -1,17 +1,22 @@
 package com.example.appdeal.ui.navigation
 
+import android.content.Intent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.appdeal.RecipeBookActivity
 import com.example.appdeal.navigation.Screen
 import com.example.appdeal.ui.screens.*
 import com.example.appdeal.ui.viewmodel.ProductViewModel
@@ -41,8 +46,8 @@ fun AppNavigation(
             composable(Screen.Favorites.route) {
                 FavoritesScreen(viewModel = viewModel)
             }
-            composable(Screen.Forum.route) {
-                ForumScreen()
+            composable(Screen.RecipeBook.route) {
+                RecipeBookScreen(viewModel = viewModel)
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
@@ -61,7 +66,7 @@ fun BottomNavigationBar(navController: NavHostController) {
             NavigationItem(Screen.Home, "Home", Icons.Default.Home),
             NavigationItem(Screen.Search, "Search", Icons.Default.Search),
             NavigationItem(Screen.Favorites, "Favorites", Icons.Default.Favorite),
-            NavigationItem(Screen.Forum, "Forum", Icons.Default.ChatBubble),
+            NavigationItem(Screen.RecipeBook, "Recipes", Icons.Default.MenuBook),
             NavigationItem(Screen.Profile, "Profile", Icons.Default.Person)
         )
 

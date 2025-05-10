@@ -5,6 +5,7 @@ sealed class Screen(val route: String) {
     object Search : Screen("search")
     object Forum : Screen("forum")
     object Favorites : Screen("favorites")
+    object RecipeBook : Screen("recipebook")
     object Profile : Screen("profile")
 
     companion object {
@@ -12,7 +13,7 @@ sealed class Screen(val route: String) {
             Home,
             Search,
             Favorites,
-            Forum,
+            RecipeBook,
             Profile
         )
     }

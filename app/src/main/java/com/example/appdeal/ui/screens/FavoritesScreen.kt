@@ -1,4 +1,3 @@
-
 package com.example.appdeal.ui.screens
 
 import androidx.compose.foundation.layout.*
@@ -6,45 +5,94 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.appdeal.data.FavoriteItem
+import com.example.appdeal.data.Product
 import com.example.appdeal.ui.viewmodel.ProductViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(viewModel: ProductViewModel) {
-    val favoriteItems by viewModel.favoriteItems.collectAsState()
+    val favoriteIngredients by viewModel.favoriteIngredients.collectAsState()
+    val favoriteProducts by viewModel.favoriteProducts.collectAsState() // Get direct access to favorited products
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "Your Favorites",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        if (favoriteItems.isEmpty()) {
-            EmptyFavorites()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Your Favorites") }
+            )
+        }
+    ) { paddingValues ->
+        if (favoriteIngredients.isEmpty() && favoriteProducts.isEmpty()) {
+            EmptyFavorites(modifier = Modifier.padding(paddingValues))
         } else {
             LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(favoriteItems, key = { it.hashCode() }) { favoriteItem ->
-                when (favoriteItem) {
-                        is FavoriteItem.FavoriteProduct -> {
-                            ProductCard(product = favoriteItem.product, viewModel = viewModel)
-                        }
-                        is FavoriteItem.FavoriteDeal -> {
-                            DealCard(deal = favoriteItem.deal)
+                // Display favorite products section (from Search)
+                if (favoriteProducts.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = "Favorite Products",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+                        )
+                    }
+                    
+                    items(favoriteProducts) { product ->
+                        FavoriteProductCard(product = product, viewModel = viewModel)
+                    }
+                }
+                
+                // Display favorite ingredients section
+                if (favoriteIngredients.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = "Favorite Ingredients",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+                        )
+                    }
+                    
+                    items(favoriteIngredients) { ingredient ->
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                            )
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = ingredient,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                                
+                                IconButton(onClick = { viewModel.removeFavoriteIngredient(ingredient) }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Remove Ingredient",
+                                        tint = MaterialTheme.colorScheme.error
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -54,22 +102,85 @@ fun FavoritesScreen(viewModel: ProductViewModel) {
 }
 
 @Composable
-fun DealCard(deal: com.example.appdeal.data.UserDeal) {
+fun FavoriteProductCard(product: Product, viewModel: ProductViewModel) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("${deal.itemName} at ${deal.storeName}", style = MaterialTheme.typography.titleMedium)
-            Text("\$${deal.price}", style = MaterialTheme.typography.bodyMedium)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = product.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+                
+                IconButton(onClick = { viewModel.toggleFavorite(product) }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Remove from favorites",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(4.dp))
+            
+            Text(
+                text = "${product.quantity} ${product.unit}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Best Price:",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                
+                Text(
+                    text = "$${String.format("%.2f", product.marketPrices.values.minOrNull() ?: 0.0)}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "At ${product.cheapestMarket}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                
+                if (product.isOnSale && product.regularPrice != null) {
+                    Text(
+                        text = "Save $${String.format("%.2f", product.regularPrice - product.cheapestPrice)}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-fun EmptyFavorites() {
+fun EmptyFavorites(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -89,7 +200,7 @@ fun EmptyFavorites() {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Start adding products to your favorites by tapping the heart icon",
+            text = "Start adding products and ingredients to your favorites by tapping the heart icon",
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant

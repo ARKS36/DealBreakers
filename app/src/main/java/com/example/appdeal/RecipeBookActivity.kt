@@ -63,9 +63,9 @@ class RecipeBookActivity : AppCompatActivity() {
         findRecipesButton.setOnClickListener {
             val matchingRecipes = recipeRepository.searchRecipesByIngredients(availableIngredientsList)
             val recipeStrings = matchingRecipes.map { recipe ->
-                "${recipe.name}\n" +
+                "${recipe.title}\n" +
                 "Prep: ${recipe.prepTime}min | Cook: ${recipe.cookTime}min | Serves: ${recipe.servings}\n" +
-                "Ingredients: ${recipe.ingredients.joinToString { it.name }}"
+                "Ingredients: ${recipe.ingredients.joinToString()}"
             }
             
             matchingRecipesAdapter.clear()

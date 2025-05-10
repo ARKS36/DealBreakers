@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.update
 import com.example.appdeal.data.FavoriteItem
 import com.example.appdeal.data.UserDeal
+import com.example.appdeal.data.Recipe
 
 
 class ProductViewModel : ViewModel() {
@@ -25,6 +26,11 @@ class ProductViewModel : ViewModel() {
     private val _favoriteProducts = MutableStateFlow<List<Product>>(emptyList())
     val favoriteProducts: StateFlow<List<Product>> = _favoriteProducts.asStateFlow()
 
+    private val _favoriteRecipes = MutableStateFlow<List<Recipe>>(emptyList())
+    val favoriteRecipes: StateFlow<List<Recipe>> = _favoriteRecipes.asStateFlow()
+
+    private val _favoriteIngredients = MutableStateFlow<List<String>>(emptyList())
+    val favoriteIngredients: StateFlow<List<String>> = _favoriteIngredients.asStateFlow()
 
     private val _favoriteItems = MutableStateFlow<List<FavoriteItem>>(emptyList())
     val favoriteItems: StateFlow<List<FavoriteItem>> = _favoriteItems
@@ -37,8 +43,9 @@ class ProductViewModel : ViewModel() {
         _favoriteItems.value = _favoriteItems.value + FavoriteItem.FavoriteDeal(deal)
     }
 
-
-
+    fun getFavoritedProducts(): List<String> {
+        return _favoriteProducts.value.map { it.name }
+    }
 
     fun onSearchQueryChange(query: String) {
         _searchQuery.value = query
@@ -62,9 +69,56 @@ class ProductViewModel : ViewModel() {
                 currentFavorites + product
             }
         }
+        
+        // Also update the favoriteItems list to keep it in sync
+        if (isFavorite(product)) {
+            _favoriteItems.update { it.filterNot { 
+                (it is FavoriteItem.FavoriteProduct) && it.product.id == product.id 
+            } }
+        } else {
+            addFavoriteProduct(product)
+        }
     }
 
     fun isFavorite(product: Product): Boolean {
         return _favoriteProducts.value.any { it.id == product.id }
+    }
+
+    fun addFavoriteRecipe(recipe: Recipe) {
+        _favoriteRecipes.value = _favoriteRecipes.value + recipe
+    }
+
+    fun removeFavoriteRecipe(recipe: Recipe) {
+        _favoriteRecipes.value = _favoriteRecipes.value.filter { it.id != recipe.id }
+    }
+
+    fun isFavoriteRecipe(recipe: Recipe): Boolean {
+        return _favoriteRecipes.value.any { it.id == recipe.id }
+    }
+
+    fun getProductsByIds(ids: List<String>): List<Product> {
+        return repository.getProductsByIds(ids)
+    }
+
+    fun addFavoriteIngredient(ingredient: String) {
+        if (!_favoriteIngredients.value.contains(ingredient)) {
+            _favoriteIngredients.value = _favoriteIngredients.value + ingredient
+        }
+    }
+
+    fun removeFavoriteIngredient(ingredient: String) {
+        _favoriteIngredients.value = _favoriteIngredients.value.filter { it != ingredient }
+    }
+
+    fun isIngredientFavorite(ingredient: String): Boolean {
+        return _favoriteIngredients.value.contains(ingredient)
+    }
+
+    fun toggleFavoriteIngredient(ingredient: String) {
+        if (isIngredientFavorite(ingredient)) {
+            removeFavoriteIngredient(ingredient)
+        } else {
+            addFavoriteIngredient(ingredient)
+        }
     }
 } 
