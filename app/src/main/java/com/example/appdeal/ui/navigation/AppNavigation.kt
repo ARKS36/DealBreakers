@@ -50,7 +50,7 @@ fun AppNavigation(
                 RecipeBookScreen(viewModel = viewModel)
             }
             composable(Screen.Profile.route) {
-                ProfileScreen()
+                ProfileScreen(username = username, productViewModel = viewModel)
             }
         }
     }
