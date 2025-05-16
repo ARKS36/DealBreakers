@@ -244,8 +244,8 @@ fun FavoritesSection(
                 
                 items(favoriteRecipes) { recipe ->
                     FavoriteItemRow(
-                        title = recipe.name,
-                        subtitle = "${recipe.ingredients.size} ingredients • ${recipe.preparationTime} mins"
+                        title = recipe.title,
+                        subtitle = "${recipe.ingredients.size} ingredients • ${recipe.prepTime} mins"
                     )
                 }
             }
@@ -264,7 +264,7 @@ fun FavoritesSection(
                         is FavoriteItem.FavoriteProduct -> {
                             FavoriteItemRow(
                                 title = item.product.name,
-                                subtitle = "Price: $${item.product.price}"
+                                subtitle = "Price: $${item.product.cheapestPrice}"
                             )
                         }
                         is FavoriteItem.FavoriteDeal -> {
@@ -362,7 +362,7 @@ fun ActivitySection(favoriteItems: List<FavoriteItem>) {
                     is FavoriteItem.FavoriteProduct -> {
                         Triple(
                             "Added ${item.product.name} to favorites",
-                            "Product from ${item.product.store}",
+                            "Product from ${item.product.cheapestMarket}",
                             System.currentTimeMillis() - (1..7).random() * 24 * 60 * 60 * 1000
                         )
                     }
