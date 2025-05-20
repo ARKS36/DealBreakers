@@ -22,10 +22,14 @@ import androidx.compose.ui.unit.dp
 import com.example.appdeal.data.MarketNews
 import com.example.appdeal.data.SampleMarketNews
 import com.example.appdeal.ui.theme.ThemeState
+import com.example.appdeal.ui.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(username: String) {
+fun HomeScreen(userViewModel: UserViewModel) {
+    val currentUser by userViewModel.currentUser.collectAsState()
+    val username = currentUser?.name ?: "Guest"
+    
     Column(
         modifier = Modifier
             .fillMaxSize()

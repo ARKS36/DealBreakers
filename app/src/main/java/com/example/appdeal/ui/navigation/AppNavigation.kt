@@ -20,12 +20,13 @@ import com.example.appdeal.RecipeBookActivity
 import com.example.appdeal.navigation.Screen
 import com.example.appdeal.ui.screens.*
 import com.example.appdeal.ui.viewmodel.ProductViewModel
+import com.example.appdeal.ui.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation(
-    username: String,
-    viewModel: ProductViewModel
+    viewModel: ProductViewModel,
+    userViewModel: UserViewModel
 ) {
     val navController = rememberNavController()
     
@@ -38,7 +39,7 @@ fun AppNavigation(
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen(username = username)
+                HomeScreen(userViewModel = userViewModel)
             }
             composable(Screen.Search.route) {
                 SearchScreen(viewModel = viewModel)
@@ -50,7 +51,7 @@ fun AppNavigation(
                 RecipeBookScreen(viewModel = viewModel)
             }
             composable(Screen.Profile.route) {
-                ProfileScreen(username = username, productViewModel = viewModel)
+                ProfileScreen(productViewModel = viewModel, userViewModel = userViewModel)
             }
         }
     }
