@@ -1,26 +1,30 @@
 package com.example.appdeal
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material3.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appdeal.ui.navigation.AppNavigation
 import com.example.appdeal.ui.theme.AppDealTheme
 import com.example.appdeal.ui.viewmodel.ProductViewModel
 import com.example.appdeal.ui.viewmodel.UserViewModel
+import com.example.appdeal.viewmodels.AuthViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     private lateinit var userViewModel: UserViewModel
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Get the user ID from intent extras if available
-        val userId = intent.getStringExtra("USER_ID")
         
         setContent {
             AppDealTheme {
@@ -30,32 +34,68 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val productViewModel: ProductViewModel = viewModel()
                     userViewModel = viewModel()
+                    val authViewModel: AuthViewModel = viewModel()
+                    val context = LocalContext.current
                     
-                    // Check if we got a userId from the login activity
-                    if (userId != null) {
-                        // This is a simple approach - in a real app, we'd use this ID to load user data
-                        // For demo purposes, we'll just update the authentication state
-                        userViewModel.setAuthenticated(true)
-                    } else {
-                        // Try to load user from shared preferences
-                        val preferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
-                        userViewModel.loadUserFromPreferences(preferences)
+                    // Check Firebase authentication state
+                    val currentUser by authViewModel.currentUser.collectAsState()
+                    val displayName by authViewModel.displayName.collectAsState()
+                    
+                    if (currentUser == null) {
+                        // Redirect to login if not authenticated
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                        return@Surface
                     }
                     
-                    AppNavigation(
-                        viewModel = productViewModel,
-                        userViewModel = userViewModel
-                    )
+                    // User is authenticated, update user info
+                    userViewModel.setAuthenticated(true)
+                    currentUser?.let { user ->
+                        // Set display name from Firebase user if available
+                        displayName?.let { name ->
+                            userViewModel.setUserName(name)
+                        } ?: user.email?.let { email ->
+                            // If no display name, use email as fallback
+                            val username = email.substringBefore('@')
+                            userViewModel.setUserName(username)
+                        }
+                        
+                        // Set email
+                        user.email?.let { email ->
+                            userViewModel.setUserEmail(email)
+                        }
+                    }
+                    
+                    Scaffold(
+                        topBar = {
+                            TopAppBar(
+                                title = { Text("DealBreakers") },
+                                actions = {
+                                    // Logout button in app bar
+                                    IconButton(onClick = {
+                                        authViewModel.signOut(context)
+                                        startActivity(Intent(context, LoginActivity::class.java))
+                                        finish()
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Logout,
+                                            contentDescription = "Logout"
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                    ) { paddingValues ->
+                        AppNavigation(
+                            viewModel = productViewModel,
+                            userViewModel = userViewModel,
+                            paddingValues = paddingValues
+                        )
+                    }
                 }
             }
         }
     }
     
-    override fun onStop() {
-        super.onStop()
-        
-        // Save user state in preferences
-        val preferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
-        userViewModel.saveUserToPreferences(preferences)
-    }
+    // We don't need to save user preferences anymore since Firebase handles that
 }

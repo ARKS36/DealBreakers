@@ -1,6 +1,6 @@
 [versions]
 agp = "8.8.2"
-kotlin = "1.9.10"
+kotlin = "2.0.0"
 compose-compiler = "1.5.3"
 androidx-core = "1.12.0"
 androidx-lifecycle = "2.7.0"
@@ -10,11 +10,13 @@ compose-bom = "2024.02.00"
 junit = "4.13.2"
 androidx-junit = "1.1.5"
 androidx-espresso = "3.5.1"
+ksp = "2.0.0-1.0.19"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 
 [libraries]

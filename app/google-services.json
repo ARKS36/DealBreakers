@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "706356558148",
+    "project_id": "dealbreakers-769cd",
+    "storage_bucket": "dealbreakers-769cd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706356558148:android:e4f634d6f0c96c887d3f11",
+        "android_client_info": {
+          "package_name": "com.example.appdeal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnQaJC1okeKj0xmgDs_myIPZ9VT7CZwT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

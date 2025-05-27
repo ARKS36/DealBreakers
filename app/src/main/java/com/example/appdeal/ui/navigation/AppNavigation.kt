@@ -2,6 +2,7 @@ package com.example.appdeal.ui.navigation
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -26,17 +27,20 @@ import com.example.appdeal.ui.viewmodel.UserViewModel
 @Composable
 fun AppNavigation(
     viewModel: ProductViewModel,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    paddingValues: PaddingValues = PaddingValues()
 ) {
     val navController = rememberNavController()
     
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
-    ) { paddingValues ->
+    ) { innerPaddingValues ->
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .padding(paddingValues)  // Apply the outer padding first
+                .padding(innerPaddingValues)  // Then apply the inner padding from the bottom bar
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(userViewModel = userViewModel)
